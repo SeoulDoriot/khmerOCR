@@ -1,0 +1,221 @@
+{
+  "test_set": "/Users/seouldorito/khmer-ocr/results/test_set.pt",
+  "n": 1840,
+  "results": {
+    "A1_crnn_scratch": {
+      "desc": "CRNN+CTC, from scratch",
+      "arch": "crnn",
+      "params": 9016755,
+      "train_minutes": 62.0,
+      "device": "mps",
+      "domains": {
+        "camera": {
+          "cer": 0.28004736530491414,
+          "wer": 0.74,
+          "n": 200,
+          "seen_in_training": false
+        },
+        "handwriting": {
+          "cer": 0.5330568124685772,
+          "wer": 0.9071428571428571,
+          "n": 840,
+          "seen_in_training": false
+        },
+        "printed_A": {
+          "cer": 0.34057654509718277,
+          "wer": 0.9233333333333333,
+          "n": 300,
+          "seen_in_training": true
+        },
+        "printed_B": {
+          "cer": 0.01183487093467524,
+          "wer": 0.21666666666666667,
+          "n": 300,
+          "seen_in_training": true
+        },
+        "printed_C": {
+          "cer": 0.08877887788778878,
+          "wer": 0.62,
+          "n": 200,
+          "seen_in_training": false
+        }
+      },
+      "overall": {
+        "cer": 0.2540507400811608,
+        "wer": 0.7478260869565218
+      }
+    },
+    "A2_crnn_transfer": {
+      "desc": "CRNN+CTC, transfer",
+      "arch": "crnn",
+      "params": 9016755,
+      "train_minutes": 64.8,
+      "device": "mps",
+      "domains": {
+        "camera": {
+          "cer": 0.27827116637063354,
+          "wer": 0.765,
+          "n": 200,
+          "seen_in_training": false
+        },
+        "handwriting": {
+          "cer": 0.46794871794871795,
+          "wer": 0.8595238095238096,
+          "n": 840,
+          "seen_in_training": false
+        },
+        "printed_A": {
+          "cer": 0.07796462109630924,
+          "wer": 0.6866666666666666,
+          "n": 300,
+          "seen_in_training": true
+        },
+        "printed_B": {
+          "cer": 0.013139502376292984,
+          "wer": 0.2633333333333333,
+          "n": 300,
+          "seen_in_training": true
+        },
+        "printed_C": {
+          "cer": 0.05478547854785479,
+          "wer": 0.48,
+          "n": 200,
+          "seen_in_training": false
+        }
+      },
+      "overall": {
+        "cer": 0.16594166934283128,
+        "wer": 0.6826086956521739
+      }
+    },
+    "A3_attn_scratch": {
+      "desc": "Attention enc-dec, scratch",
+      "arch": "attn",
+      "params": 20703797,
+      "train_minutes": 86.4,
+      "device": "mps",
+      "domains": {
+        "camera": {
+          "cer": 0.30165778567199525,
+          "wer": 0.685,
+          "n": 200,
+          "seen_in_training": false
+        },
+        "handwriting": {
+          "cer": 0.49107591754650576,
+          "wer": 0.8690476190476191,
+          "n": 840,
+          "seen_in_training": false
+        },
+        "printed_A": {
+          "cer": 0.3637257043022494,
+          "wer": 0.93,
+          "n": 300,
+          "seen_in_training": true
+        },
+        "printed_B": {
+          "cer": 0.04491659677569658,
+          "wer": 0.3233333333333333,
+          "n": 300,
+          "seen_in_training": true
+        },
+        "printed_C": {
+          "cer": 0.08382838283828382,
+          "wer": 0.52,
+          "n": 200,
+          "seen_in_training": false
+        }
+      },
+      "overall": {
+        "cer": 0.2625463463054331,
+        "wer": 0.7320652173913044
+      }
+    },
+    "handwriting": {
+      "desc": "A2 + handwriting fine-tune",
+      "arch": "crnn",
+      "params": 9016755,
+      "train_minutes": null,
+      "device": "mps",
+      "domains": {
+        "camera": {
+          "cer": 0.39550029603315573,
+          "wer": 0.94,
+          "n": 200,
+          "seen_in_training": false
+        },
+        "handwriting": {
+          "cer": 0.2071392659627954,
+          "wer": 0.6714285714285714,
+          "n": 840,
+          "seen_in_training": false
+        },
+        "printed_A": {
+          "cer": 0.08353352260318847,
+          "wer": 0.8033333333333333,
+          "n": 300,
+          "seen_in_training": true
+        },
+        "printed_B": {
+          "cer": 0.16130835896002235,
+          "wer": 0.95,
+          "n": 300,
+          "seen_in_training": true
+        },
+        "printed_C": {
+          "cer": 0.10462046204620462,
+          "wer": 0.62,
+          "n": 200,
+          "seen_in_training": false
+        }
+      },
+      "overall": {
+        "cer": 0.16924065045397482,
+        "wer": 0.7619565217391304
+      }
+    },
+    "baseline_pretrained": {
+      "desc": "Pretrained printed specialist",
+      "arch": "crnn",
+      "params": 9016755,
+      "train_minutes": null,
+      "device": "mps",
+      "domains": {
+        "camera": {
+          "cer": 0.7696862048549438,
+          "wer": 0.99,
+          "n": 200,
+          "seen_in_training": false
+        },
+        "handwriting": {
+          "cer": 0.8618652589240825,
+          "wer": 0.9904761904761905,
+          "n": 840,
+          "seen_in_training": false
+        },
+        "printed_A": {
+          "cer": 0.006442454684428915,
+          "wer": 0.11333333333333333,
+          "n": 300,
+          "seen_in_training": true
+        },
+        "printed_B": {
+          "cer": 0.7042214145932345,
+          "wer": 0.9933333333333333,
+          "n": 300,
+          "seen_in_training": true
+        },
+        "printed_C": {
+          "cer": 0.5181518151815182,
+          "wer": 0.975,
+          "n": 200,
+          "seen_in_training": false
+        }
+      },
+      "overall": {
+        "cer": 0.5442734942924707,
+        "wer": 0.846195652173913
+      }
+    }
+  }
+}

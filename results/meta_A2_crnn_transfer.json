@@ -1,0 +1,17 @@
+{
+  "tag": "A2_crnn_transfer",
+  "arch": "crnn",
+  "strategy": "transfer",
+  "params": 9016755,
+  "steps": 4000,
+  "batch_size": 32,
+  "lr": 5e-05,
+  "best_val_cer": 0.02323991797676008,
+  "train_minutes": 64.8,
+  "device": "mps",
+  "hardware": "macOS-27.0-arm64-arm-64bit",
+  "torch": "2.13.0",
+  "seed": 42,
+  "train_n": 20000,
+  "val_n": 1000
+}
