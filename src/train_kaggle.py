@@ -1,0 +1,323 @@
+"""Khmer OCR training on Kaggle. CONTINUES the Colab model.
+
+Kaggle differences handled here:
+  * No Google Drive. The starting checkpoint arrives as a Kaggle Dataset at
+    /kaggle/input/<slug>/ and outputs go to /kaggle/working/ (which persists
+    after the run and can be downloaded or re-uploaded for the next session).
+  * Notebook setting "Internet" must be ON, or HuggingFace streaming fails.
+  * Sessions last up to 12h and run with the browser CLOSED (Save & Run All),
+    so unlike Colab free this does not need keep-awake tricks.
+
+CONTINUITY IS THE POINT: the charset comes from the checkpoint, so the output
+layer keeps its meaning and this is the SAME model continuing to learn -- not a
+new one. Resuming also restores optimizer and LR-schedule state, so the run
+picks up mid-curve instead of jumping back to peak learning rate (doing that
+previously undid 6000 steps of progress).
+"""
+import argparse, os, random, signal, time, unicodedata
+import numpy as np, torch, torch.nn as nn
+from PIL import Image
+from torch.utils.data import DataLoader, IterableDataset
+
+COENG = "្"
+INHERENT = {"឴", "឵"}
+ZW = {"​", "‌", "‍", "﻿", "­"}
+_cons = lambda c: "ក" <= c <= "អ"
+_vow = lambda c: "ា" <= c <= "ៅ"
+_shift = lambda c: c in ("៉", "៊")
+_kh = lambda c: "ក" <= c <= "៿"
+
+def _clusters(t):
+    out, cur = [], ""
+    for ch in t:
+        new = _cons(ch) or ("ឣ" <= ch <= "ឳ")
+        if new and cur.endswith(COENG): new = False
+        if new and cur: out.append(cur); cur = ch
+        elif new: cur = ch
+        else:
+            if not cur: out.append(ch); continue
+            cur += ch
+    if cur: out.append(cur)
+    return out
+
+def _canon(cl):
+    if not cl: return cl
+    base, i = cl[0], 1
+    co, sh, vo, sg = [], [], [], []
+    while i < len(cl):
+        ch = cl[i]
+        if ch == COENG and i + 1 < len(cl):
+            co.append(COENG + cl[i + 1]); i += 2; continue
+        (sh if _shift(ch) else vo if _vow(ch) else sg).append(ch); i += 1
+    co.sort(); sg.sort()
+    return base + "".join(co) + "".join(sh) + "".join(vo) + "".join(sg)
+
+def normalize_khmer(t):
+    if not t: return ""
+    t = unicodedata.normalize("NFC", t)
+    t = "".join(c for c in t if c not in ZW and c not in INHERENT)
+    return " ".join("".join(_canon(c) for c in _clusters(t)).split())
+
+def khmer_ratio(t):
+    L = [c for c in t if not c.isspace()]
+    return sum(_kh(c) for c in L) / len(L) if L else 0.0
+
+
+class CRNN(nn.Module):
+    def __init__(s, n_cls):
+        super().__init__()
+        def blk(i, o, p):
+            return nn.Sequential(nn.Conv2d(i, o, 3, 1, 1), nn.BatchNorm2d(o), nn.ReLU(True),
+                                 nn.Conv2d(o, o, 3, 1, 1), nn.BatchNorm2d(o), nn.ReLU(True),
+                                 nn.MaxPool2d(p))
+        s.cnn = nn.Sequential(blk(1, 64, (2, 2)), blk(64, 128, (2, 2)),
+                              blk(128, 256, (2, 1)), blk(256, 512, (2, 1)),
+                              nn.Conv2d(512, 512, (4, 1)), nn.BatchNorm2d(512), nn.ReLU(True))
+        s.rnn = nn.LSTM(512, 256, 2, bidirectional=True, batch_first=True, dropout=0.1)
+        s.fc = nn.Linear(512, n_cls)
+    def forward(s, x):
+        return s.fc(s.rnn(s.cnn(x).squeeze(2).permute(0, 2, 1))[0])
+
+
+H, W = 64, 512
+TEXT_KEYS = ["text", "label", "sentence", "transcription", "ground_truth", "caption"]
+IMG_KEYS = ["image", "img", "picture"]
+REPOS = ["Chanrith123333/khmer_english_ocr_image_line", "SoyVitou/KhmerSynthetic1M",
+         "KimkosalYon/khmer-ocr-200k-siemreap-arial", "SoyVitou/62k-images-khmer-printed-dataset"]
+WEIGHTS = [0.35, 0.30, 0.15, 0.20]
+
+def prep(img):
+    img = img.convert("L"); w, h = img.size
+    nw = max(8, min(W, int(w * H / max(h, 1))))
+    img = img.resize((nw, H), Image.BILINEAR)
+    c = Image.new("L", (W, H), 255); c.paste(img, (0, 0)); return c
+
+def to_tensor(img, aug=False):
+    a = np.array(img, dtype=np.float32)
+    if aug:
+        if random.random() < 0.4: a += np.random.normal(0, random.uniform(3, 12), a.shape)
+        if random.random() < 0.4: a = (a - 128) * random.uniform(0.7, 1.3) + 128
+    return torch.from_numpy((np.clip(a, 0, 255) / 255.0 - 0.5) / 0.5)[None]
+
+def row_sample(row, stoi, max_len, ko):
+    tk = next((k for k in TEXT_KEYS if k in row), None)
+    ik = next((k for k in IMG_KEYS if k in row), None)
+    if not tk or not ik: return None
+    l = normalize_khmer(row[tk])
+    if not l or len(l) > max_len: return None
+    if ko and khmer_ratio(l) < 0.8: return None
+    ids = [stoi[c] for c in l if c in stoi]
+    if not ids: return None
+    return row[ik], l, ids
+
+
+class MixStream(IterableDataset):
+    def __init__(s, repos, w, stoi, ml, ko, buf, seed, skip):
+        s.repos, s.w, s.stoi, s.ml, s.ko, s.buf, s.seed, s.skip = repos, w, stoi, ml, ko, buf, seed, skip
+    def __iter__(s):
+        from datasets import load_dataset
+        info = torch.utils.data.get_worker_info()
+        wid = info.id if info else 0; nw = info.num_workers if info else 1
+        rng = random.Random(s.seed * 1000 + wid)
+        its, ws = [], []
+        for r, w in zip(s.repos, s.w):
+            try:
+                d = load_dataset(r, split="train", streaming=True)
+                if s.buf: d = d.shuffle(seed=s.seed + wid, buffer_size=s.buf)
+                if nw > 1: d = d.shard(num_shards=nw, index=wid)
+                its.append(iter(d)); ws.append(w)
+            except Exception as e:
+                if wid == 0: print(f"  [skip] {r}: {e}", flush=True)
+        if not its: return
+        sk = 0
+        while its:
+            i = rng.choices(range(len(its)), weights=ws)[0]
+            try: row = next(its[i])
+            except StopIteration: its.pop(i); ws.pop(i); continue
+            except Exception: continue
+            if sk < s.skip: sk += 1; continue
+            o = row_sample(row, s.stoi, s.ml, s.ko)
+            if o is None: continue
+            try: t = to_tensor(prep(o[0]), aug=True)
+            except Exception: continue
+            yield t, torch.tensor(o[2]), o[1]
+
+def collate(b):
+    im, tg, tx = zip(*b)
+    return torch.stack(im), torch.cat(tg), torch.tensor([len(t) for t in tg]), list(tx)
+
+def edit(a, b):
+    if a == b: return 0
+    if not a: return len(b)
+    prev = list(range(len(b) + 1))
+    for i, ca in enumerate(a, 1):
+        cur = [i]
+        for j, cb in enumerate(b, 1):
+            cur.append(min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (ca != cb)))
+        prev = cur
+    return prev[-1]
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--init", default="/kaggle/input/khmer-ocr-checkpoint/quickstart2_crnn.pt")
+    ap.add_argument("--out", default="/kaggle/working/v6_state.pt")
+    ap.add_argument("--steps", type=int, default=60000)
+    ap.add_argument("--batch-size", type=int, default=128)
+    ap.add_argument("--lr", type=float, default=5e-5)
+    ap.add_argument("--max-len", type=int, default=60)
+    ap.add_argument("--khmer-only", action="store_true", default=True)
+    ap.add_argument("--shuffle-buffer", type=int, default=1000)
+    ap.add_argument("--workers", type=int, default=3)
+    ap.add_argument("--val-size", type=int, default=1200)
+    ap.add_argument("--save-every", type=int, default=500)
+    ap.add_argument("--eval-every", type=int, default=2000)
+    ap.add_argument("--max-hours", type=float, default=11.0)
+    a = ap.parse_args()
+
+    assert 2 * a.max_len <= W // 4
+    dev = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    print(f"device={dev}")
+    if dev.type == "cuda":
+        print("gpu:", torch.cuda.get_device_name(0))
+        torch.backends.cudnn.benchmark = True    # fixed input size -> free speedup
+    best_path = a.out + ".best.pt"
+
+    # resume from our own output first, otherwise from the Colab checkpoint
+    src = a.out if os.path.exists(a.out) else a.init
+    if not os.path.exists(src):
+        raise SystemExit(f"no checkpoint at {src}. Upload quickstart2_crnn.pt as a "
+                         f"Kaggle Dataset and check the slug in --init.")
+    ck = torch.load(src, map_location="cpu", weights_only=False)
+    chars = ck["chars"]
+    stoi = {c: i + 1 for i, c in enumerate(chars)}
+    itos = {i + 1: c for i, c in enumerate(chars)}
+    resuming = src == a.out
+    step0 = ck.get("step", 0) if resuming else 0
+    best = ck.get("best", 9.9) if resuming else 9.9
+    rc = ck.get("resume_count", 0) + 1 if resuming else 0
+    seed = 1234 + rc * 7919
+    print(f"{'RESUME' if resuming else 'CONTINUE FROM COLAB'}: {src}")
+    print(f"  charset={len(chars)}  step={step0}/{a.steps}  prior CER={ck.get('cer')}  seed={seed}")
+    if step0 >= a.steps:
+        print("target reached; raise --steps."); return
+
+    print(f"building eval set ({a.val_size}) ...", flush=True)
+    from datasets import load_dataset
+    val, n, per = [], 0, max(1, a.val_size // len(REPOS))
+    for r in REPOS:
+        try: d = load_dataset(r, split="train", streaming=True)
+        except Exception as e: print(f"  [skip] {r}: {e}"); continue
+        got = 0
+        for row in d:
+            n += 1
+            o = row_sample(row, stoi, a.max_len, a.khmer_only)
+            if o is None: continue
+            try: val.append((to_tensor(prep(o[0])), o[1]))
+            except Exception: continue
+            got += 1
+            if got >= per: break
+        print(f"  {got:4d}  {r}", flush=True)
+    print(f"  total {len(val)}")
+
+    tl = DataLoader(MixStream(REPOS, WEIGHTS, stoi, a.max_len, a.khmer_only,
+                              a.shuffle_buffer, seed, per),
+                    batch_size=a.batch_size, collate_fn=collate,
+                    num_workers=a.workers, pin_memory=True,
+                    persistent_workers=a.workers > 0)
+
+    model = CRNN(len(chars) + 1).to(dev)
+    model.load_state_dict(ck["model"])
+    print(f"params={sum(p.numel() for p in model.parameters())/1e6:.1f}M  (weights loaded)")
+    opt = torch.optim.AdamW(model.parameters(), a.lr, weight_decay=0.01)
+    sch = torch.optim.lr_scheduler.OneCycleLR(opt, a.lr, total_steps=a.steps, pct_start=0.05)
+    scaler = torch.amp.GradScaler(enabled=dev.type == "cuda")
+    if resuming and "opt" in ck:
+        opt.load_state_dict(ck["opt"]); sch.load_state_dict(ck["sched"])
+        scaler.load_state_dict(ck["scaler"])
+        print(f"  optimizer + schedule restored (lr {sch.get_last_lr()[0]:.2e})")
+    ctc = nn.CTCLoss(blank=0, zero_infinity=True)
+
+    def decode(s):
+        o, p = [], None
+        for i in s:
+            if i != 0 and i != p: o.append(itos.get(i, ""))
+            p = i
+        return "".join(o)
+
+    @torch.no_grad()
+    def ev():
+        model.eval(); P, G = [], []
+        for i in range(0, len(val), a.batch_size):
+            ch = val[i:i + a.batch_size]
+            with torch.autocast(dev.type, torch.float16, enabled=dev.type == "cuda"):
+                lg = model(torch.stack([c[0] for c in ch]).to(dev))
+            P += [decode(s) for s in lg.argmax(-1).cpu().tolist()]
+            G += [c[1] for c in ch]
+        model.train()
+        return (sum(edit(p, g) for p, g in zip(P, G)) / max(sum(len(g) for g in G), 1),
+                sum(p != g for p, g in zip(P, G)) / len(G), list(zip(P, G))[:2])
+
+    def save(step):
+        torch.save({"model": model.state_dict(), "opt": opt.state_dict(),
+                    "sched": sch.state_dict(), "scaler": scaler.state_dict(),
+                    "chars": chars, "step": step, "best": best,
+                    "resume_count": rc}, a.out)
+
+    if not resuming:
+        c0, w0, _ = ev()
+        best = c0
+        print(f"\nCONTINUING from Colab model: CER {c0:.4f} WER {w0:.4f} on this eval set")
+
+    stop = {"now": False}
+    signal.signal(signal.SIGTERM, lambda *_: stop.update(now=True))
+    signal.signal(signal.SIGINT, lambda *_: stop.update(now=True))
+    t_start = time.time()
+
+    print(f"\ntraining to {a.steps} (from {step0})\n" + "-" * 60, flush=True)
+    step, run, t0 = step0, 0.0, time.time()
+    while step < a.steps and not stop["now"]:
+        for im, tg, ln, tx in tl:
+            if step >= a.steps or stop["now"]: break
+            if (time.time() - t_start) / 3600 > a.max_hours:
+                print(f"\nhit --max-hours {a.max_hours}; saving and exiting cleanly.")
+                stop["now"] = True; break
+            im = im.to(dev, non_blocking=True)
+            with torch.autocast(dev.type, torch.float16, enabled=dev.type == "cuda"):
+                lg = model(im)
+            lp = lg.log_softmax(-1).permute(1, 0, 2).float()
+            loss = ctc(lp, tg, torch.full((im.size(0),), lg.size(1), dtype=torch.long), ln)
+            opt.zero_grad(set_to_none=True)
+            scaler.scale(loss).backward(); scaler.unscale_(opt)
+            nn.utils.clip_grad_norm_(model.parameters(), 5.0)
+            scaler.step(opt); scaler.update()
+            if sch.last_epoch < a.steps - 1: sch.step()
+            run += loss.item(); step += 1
+            if step % 200 == 0:
+                ips = 200 * a.batch_size / (time.time() - t0)
+                print(f"step {step:6d}/{a.steps}  loss {run/200:7.4f}  {ips:5.0f} img/s  "
+                      f"{(time.time()-t_start)/3600:.1f}h", flush=True)
+                run, t0 = 0.0, time.time()
+            if step % a.save_every == 0: save(step)
+            if step % a.eval_every == 0 or step == a.steps:
+                cer, wer, ex = ev()
+                flag = ""
+                if cer < best:
+                    best = cer; flag = "  <- best"
+                    torch.save({"model": model.state_dict(), "chars": chars,
+                                "cer": cer, "step": step}, best_path)
+                save(step)
+                print(f"  >> CER {cer:.4f}  WER {wer:.4f}{flag}", flush=True)
+                for p, g in ex[:1]:
+                    print(f"     pred: {p}\n     gold: {g}")
+                t0 = time.time()
+
+    save(step)
+    print("\n" + "=" * 60)
+    print(f"stopped at step {step}/{a.steps}.  best CER {best:.4f}")
+    print(f"state -> {a.out}\nbest  -> {best_path}")
+    print("Download both from the Output tab, re-upload as a Dataset to continue.")
+
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,8 @@
+# checkpoints are large; hosted externally per rubric (>50MB)
+checkpoints/
+*.pt
+logs/
+__pycache__/
+*.pyc
+.DS_Store
+.venv/
