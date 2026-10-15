@@ -1,0 +1,15 @@
+{
+  "category": "handwriting",
+  "source": "SoyVitou/khmer-handwritten-dataset-4.2k",
+  "candidate_pool": 840,
+  "candidate_pool_notice": "The source-labelled handwriting pool contains printed and English samples too; it is not a pure handwriting benchmark.",
+  "exact_matches_in_mixed_pool": 276,
+  "khmer_exact_match_candidates_visually_reviewed": 222,
+  "selected_visually_reviewed_handwriting": 151,
+  "selection": "Selected exact matches containing Khmer, visually reviewed to exclude obvious printed text, English-only text and uncertain tiny samples. Visual review is not verified writer provenance.",
+  "model": "Available local CNN-BiLSTM-CTC handwriting fine-tune, step 3000; distinct from unavailable Kaggle Transformer specialist",
+  "checkpoint_sha256": "43abac33aa8b8e9c0489039446218be3b43dad2aa897f809433b69623bd60050",
+  "independent_benchmark": false,
+  "evaluation_notice": "Existing project partition was also used for handwriting fine-tune checkpoint selection; selected demo examples are not general accuracy or an unseen-writer benchmark.",
+  "normalization": "Original project Khmer cluster normalization applied to source labels and predictions; no labels replaced by predictions."
+}

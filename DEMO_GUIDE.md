@@ -1,5 +1,24 @@
 # Teacher demonstration guide
 
+## Choose the correct image category
+
+- **Printed Khmer:** 10000 selected exact-match images in the printed/ folder of [this archive](https://huggingface.co/datasets/Seoul12/khmer-ocr-selected-demo/resolve/main/Khmer_OCR_10000_Selected.zip?download=true). Uses the saved Transformer at step 87000. Open printed/Gallery_10000.html after unzipping.
+- **Khmer handwriting:** 151 visually reviewed handwriting examples in the handwriting/ folder of [the separate handwriting archive](https://huggingface.co/datasets/Seoul12/khmer-ocr-handwriting-demo/resolve/main/Handwriting_Khmer_Selected.zip?download=true). Uses the available handwriting BiLSTM fine tune at step 3000. Every selected handwriting example was rerun individually on CPU with an exact match. Open handwriting/Gallery_Handwriting.html after unzipping.
+
+[Open the category test notebook in Colab](https://colab.research.google.com/github/SeoulDoriot/khmerOCR/blob/main/Test_By_Category.ipynb). Run all, select Printed or Handwriting, click Load selected dataset, enter the example number from that gallery and click Run real prediction. Changing category requires loading the matching dataset again; the notebook prevents testing with the previously loaded wrong model.
+
+These are selected demonstration sets, not overall model accuracy on new images. The handwriting source was mixed: 840 project-partition candidates included printed and English examples too. We inspected all 222 Khmer exact-match candidates and retained 151 clear handwriting examples. Obvious printed/English examples and uncertain tiny glyphs were excluded. Writer provenance is not established, and the partition was also used for fine-tune checkpoint selection. The handwriting checkpoint is the local BiLSTM variant, not the unavailable Kaggle Transformer specialist. Do not use the mixed-pool CER as a handwriting-only benchmark.
+
+Printed source: Chanrith123333/khmer_english_ocr_image_line, CC BY 4.0. Handwriting source: SoyVitou/khmer-handwritten-dataset-4.2k, MIT declared in upstream metadata; upstream card is included. Source attribution, checksums, answers, predictions and review records are preserved in each archive.
+
+## 10000 selected Transformer demonstration images
+
+[Open the 10000 image live demo in Colab](https://colab.research.google.com/github/SeoulDoriot/khmerOCR/blob/main/Demo_10000.ipynb). Run all, enter an example number, and click Run real prediction. CPU is sufficient.
+
+[Download the 10000 image gallery](https://huggingface.co/datasets/Seoul12/khmer-ocr-selected-demo/resolve/main/Khmer_OCR_10000_Selected.zip?download=true). Unzip it and open printed/Gallery_10000.html. Browse, search Khmer answers, or jump to an example number. Use that same number in the notebook. Each selected image has its original normalized answer, source validation row and image checksum.
+
+These are **10000 selected exact-match printed line examples for the Transformer only**. This is not 100% accuracy on arbitrary images or a BiLSTM/BiGRU selection. The model weights are unchanged. First 500 candidates were screened on CPU and later candidates on Apple MPS GPU; 32-image initial token parity and 100 random single-image CPU rechecks passed. Numerical differences across runtimes remain possible. All source answers were preserved with NFC/whitespace normalization; no answer was replaced with a prediction. Full screening results, including errors, are in screening_results.jsonl inside the ZIP.
+
 ## Expanded model specific gallery
 
 Screened **500 unique printed validation images** using the three saved models. Selected exact matches: **Transformer 380**, **BiLSTM 273**, **BiGRU 70**. **49 images were correct for all three.** These sets overlap; there are 426 selected unique images in total. These are selected demonstration examples, not overall accuracy or a fair benchmark.

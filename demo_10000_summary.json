@@ -1,0 +1,14 @@
+{
+  "target_selected": 10000,
+  "selected_exact_matches": 10000,
+  "screened_unique_images": 14652,
+  "next_source_row": 14652,
+  "download_errors": 0,
+  "source": "Chanrith123333/khmer_english_ocr_image_line",
+  "split": "validation",
+  "model_step": 87000,
+  "checkpoint_sha256": "d6f24492cd6ce2673af9f1fcbea1cdb8255cd71f28307bbd979bce566bbf0bbb",
+  "backends": "First 500 CPU; later screening on Apple MPS GPU. Initial CPU/MPS token parity check passed for 32 images.",
+  "language_filter": "Every selected answer contains at least one Khmer consonant U+1780 to U+17A2. English-only and code-only lines are excluded from the gallery.",
+  "selection_notice": "Selected after exact comparison to source NFC/whitespace-normalized labels; not benchmark accuracy or a guarantee on arbitrary images."
+}
