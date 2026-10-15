@@ -1,0 +1,19 @@
+{
+  "description": "Selected exact-match demo gallery. Images are chosen after model screening, not a benchmark. Shared NFC/rounded-width preprocessing is used; original recurrent preprocessing can differ. Training steps do not equal unique images learned.",
+  "source": "Chanrith123333/khmer_english_ocr_image_line",
+  "split": "validation",
+  "source_rows_requested": 500,
+  "screened_unique_images": 500,
+  "selected_unique_images": 426,
+  "exact_matches_by_model": {
+    "bilstm": 273,
+    "bigru": 70,
+    "transformer": 380
+  },
+  "all_three_exact": 49,
+  "checkpoint_steps": {
+    "bilstm": 58000,
+    "bigru": 8500,
+    "transformer": 87000
+  }
+}

@@ -1,5 +1,15 @@
 # Teacher demonstration guide
 
+## Expanded model specific gallery
+
+Screened **500 unique printed validation images** using the three saved models. Selected exact matches: **Transformer 380**, **BiLSTM 273**, **BiGRU 70**. **49 images were correct for all three.** These sets overlap; there are 426 selected unique images in total. These are selected demonstration examples, not overall accuracy or a fair benchmark.
+
+[Open expanded live demo in Colab](https://colab.research.google.com/github/SeoulDoriot/khmerOCR/blob/main/Expanded_Demo.ipynb). Run all, choose a model and image, then click Run real prediction. CPU is sufficient.
+
+[Download the gallery and image folders](https://huggingface.co/datasets/Seoul12/khmer-ocr-selected-demo/resolve/main/Expanded_Khmer_OCR_Demo.zip?download=true). Unzip it and open Gallery.html. Choose a model, or choose Correct for all three models. The all_three folder contains the 49 common exact-match images; individual model folders include more examples and answers.csv.
+
+Images are cropped printed text lines. New images, handwriting and full pages can behave differently. Labels were kept from the source dataset and normalized consistently, not replaced with predictions. expanded_screening_results.json includes failures. The earlier 20-image demo below remains available.
+
 ## Quick demonstration
 
 [Open the Transformer demo in Colab](https://colab.research.google.com/github/SeoulDoriot/khmerOCR/blob/main/Khmer_OCR_Demo.ipynb). Choose Runtime → Run all. It runs on CPU and shows each image, expected answer, actual prediction and RIGHT/WRONG. A Google account may be required to execute Colab; no Hugging Face account is needed to download public files.
