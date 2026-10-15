@@ -1,0 +1,330 @@
+{
+  "description": "Selected successful demo examples; not benchmark accuracy",
+  "source_split": "validation",
+  "screened": 40,
+  "exact_matches": 28,
+  "selected": 20,
+  "excluded_row_indices": [],
+  "results": [
+    {
+      "source": "Chanrith123333/khmer_english_ocr_image_line",
+      "source_split": "validation",
+      "source_row_index": 0,
+      "answer": "សៅភារ៉ា ពលរដ្ឋខ្មែរភាគតិច",
+      "prediction": "សៅភារ៉ា ពលរដ្ឋខ្មែរភាគតិច",
+      "exact_match": true
+    },
+    {
+      "source": "Chanrith123333/khmer_english_ocr_image_line",
+      "source_split": "validation",
+      "source_row_index": 1,
+      "answer": "ឈប់ទិញទំនិញ និងឈប់មកវិនិយោគ",
+      "prediction": "ឈប់ទិញទំនិញ និងឈប់មកវិនិយោគ",
+      "exact_match": true
+    },
+    {
+      "source": "Chanrith123333/khmer_english_ocr_image_line",
+      "source_split": "validation",
+      "source_row_index": 2,
+      "answer": "ប្រក្រតី និងបណ្តាលឲ្យមានជំងឺមហារីក",
+      "prediction": "ប្រក្រតី និងបណ្តាលឲ្យមានជំងឺមហារីក",
+      "exact_match": true
+    },
+    {
+      "source": "Chanrith123333/khmer_english_ocr_image_line",
+      "source_split": "validation",
+      "source_row_index": 3,
+      "answer": "Kane ពីក្រុម Tottenham ជំនួសឲ្យ",
+      "prediction": "Kane ពីក្រូម Totinham ជំនួសឲ្យ",
+      "exact_match": false
+    },
+    {
+      "source": "Chanrith123333/khmer_english_ocr_image_line",
+      "source_split": "validation",
+      "source_row_index": 4,
+      "answer": "២៥%បាត់បង់ញាណក្បាលដោះក្រោយពី",
+      "prediction": "២៥%បាត់បង់ញាណក្បាលដោះក្រោយពី",
+      "exact_match": true
+    },
+    {
+      "source": "Chanrith123333/khmer_english_ocr_image_line",
+      "source_split": "validation",
+      "source_row_index": 5,
+      "answer": "សែនជីដូនជីតា របស់ជនជាតិ Ha",
+      "prediction": "សែនជីដូនជីតា របស់ជនជាតិ Ha",
+      "exact_match": true
+    },
+    {
+      "source": "Chanrith123333/khmer_english_ocr_image_line",
+      "source_split": "validation",
+      "source_row_index": 6,
+      "answer": "បានរៀបចំគោលនយោបាយស្តីពីសុខភាព",
+      "prediction": "បានរៀបចំគោលនយោបាយស្តីពីសុខភាព",
+      "exact_match": true
+    },
+    {
+      "source": "Chanrith123333/khmer_english_ocr_image_line",
+      "source_split": "validation",
+      "source_row_index": 7,
+      "answer": "ដោះស្រាយបញ្ហានានា ពាក់ព័ន្ធនឹងឧបាយកល",
+      "prediction": "ដោះស្រាយបញ្ហានានា ពាក់ព័ន្ធនឹងឧបាយកល",
+      "exact_match": true
+    },
+    {
+      "source": "Chanrith123333/khmer_english_ocr_image_line",
+      "source_split": "validation",
+      "source_row_index": 8,
+      "answer": "ជំនួស Young ក្រោយមានអ...2020-01-17 07:51:49ប្រជុំ",
+      "prediction": "ជំនួស oung ក្រោយមានអ...20-0-17 07:5149ប្រជុំ",
+      "exact_match": false
+    },
+    {
+      "source": "Chanrith123333/khmer_english_ocr_image_line",
+      "source_split": "validation",
+      "source_row_index": 9,
+      "answer": "វាជាការសំខាន់ណាស់សម្រាប់ប្រទេស",
+      "prediction": "វាជាការសំខាន់ណាស់សម្រាប់ប្រទេស",
+      "exact_match": true
+    },
+    {
+      "source": "Chanrith123333/khmer_english_ocr_image_line",
+      "source_split": "validation",
+      "source_row_index": 10,
+      "answer": "ដូចជាតំបន់អាស៊ាន កំពុងក្លាយជាប្រធានបទ",
+      "prediction": "ដូចជាតំបន់អាសាន កំពុងក្លាយជាប្រធានបទ",
+      "exact_match": false
+    },
+    {
+      "source": "Chanrith123333/khmer_english_ocr_image_line",
+      "source_split": "validation",
+      "source_row_index": 11,
+      "answer": "អនិតិជន ក្រសួងមហាផ្ទៃ បានចុះបង្ក្រាបហាង",
+      "prediction": "អនិតិជន ក្រសួងមហាផ្ទៃ បានចុះបង្ក្រាបហាង",
+      "exact_match": true
+    },
+    {
+      "source": "Chanrith123333/khmer_english_ocr_image_line",
+      "source_split": "validation",
+      "source_row_index": 12,
+      "answer": "នគរបាលទឹកល្អក់៣ ហើយនៅម៉ោង",
+      "prediction": "នគរបាលទឹកល្អក់៣ ហើយនៅម៉ោង",
+      "exact_match": true
+    },
+    {
+      "source": "Chanrith123333/khmer_english_ocr_image_line",
+      "source_split": "validation",
+      "source_row_index": 13,
+      "answer": "។ ចំណែកអ្នកថ្មើជើង ឈ្មោះ ហើយ",
+      "prediction": "។ ចំណែកអ្នកថ្មើជើង ឈ្មោះ ហើយ",
+      "exact_match": true
+    },
+    {
+      "source": "Chanrith123333/khmer_english_ocr_image_line",
+      "source_split": "validation",
+      "source_row_index": 14,
+      "answer": "ប្រតិភូរបស់ឯកឧត្តម។ ក្នុងន័យ",
+      "prediction": "ប្រតិភូរបស់ឯកឧត្តម។ ក្នុងន័យ",
+      "exact_match": true
+    },
+    {
+      "source": "Chanrith123333/khmer_english_ocr_image_line",
+      "source_split": "validation",
+      "source_row_index": 15,
+      "answer": "បៀ APK ទាញយក APK លេង Poker",
+      "prediction": "បៀ APK ទាញយក APK លេង Poker",
+      "exact_match": true
+    },
+    {
+      "source": "Chanrith123333/khmer_english_ocr_image_line",
+      "source_split": "validation",
+      "source_row_index": 16,
+      "answer": "បើមិនយល់ទាស់ទេសុំ",
+      "prediction": "បើមិនយល់ទាស់ទេសុំ",
+      "exact_match": true
+    },
+    {
+      "source": "Chanrith123333/khmer_english_ocr_image_line",
+      "source_split": "validation",
+      "source_row_index": 17,
+      "answer": "នឹងបន្តចូលរួមឲ្យកាន់តែសំរេច",
+      "prediction": "នឹងបន្តចូលរួមឲ្យកាន់តែសំរេច",
+      "exact_match": true
+    },
+    {
+      "source": "Chanrith123333/khmer_english_ocr_image_line",
+      "source_split": "validation",
+      "source_row_index": 18,
+      "answer": "សម្រស់ដ៏ទាក់ទាញរបស់នាង ខណៈ",
+      "prediction": "សម្រស់ដ៏ទាក់ទាញរបស់នាង ខណៈ",
+      "exact_match": true
+    },
+    {
+      "source": "Chanrith123333/khmer_english_ocr_image_line",
+      "source_split": "validation",
+      "source_row_index": 19,
+      "answer": "ពីធនាគារអភិវឌ្ឍន៍អាស៊ីនៃ គម្រោង",
+      "prediction": "ពីធនាគារអភិវឌ្ឍន៍អាស៊ីនៃ គម្រោង",
+      "exact_match": true
+    },
+    {
+      "source": "Chanrith123333/khmer_english_ocr_image_line",
+      "source_split": "validation",
+      "source_row_index": 20,
+      "answer": "គឺជាអត្ថប្រយោជន៍ដែលបានមកពីការទទួលទាន",
+      "prediction": "គឺជាអត្ថប្រយោជន៍ដែលបានមកពីការទទួលទាន",
+      "exact_match": true
+    },
+    {
+      "source": "Chanrith123333/khmer_english_ocr_image_line",
+      "source_split": "validation",
+      "source_row_index": 21,
+      "answer": "ដែលទទួលបាន Android Q Beta 3",
+      "prediction": "ដែលទទួលបាន Android Q Beta 3",
+      "exact_match": true
+    },
+    {
+      "source": "Chanrith123333/khmer_english_ocr_image_line",
+      "source_split": "validation",
+      "source_row_index": 22,
+      "answer": "គាត់អស្ចារ្យ! ជាការពិត ដែលគាត់",
+      "prediction": "គាត់អសចារ្យ! ជាការពិត ដែលគាត់",
+      "exact_match": false
+    },
+    {
+      "source": "Chanrith123333/khmer_english_ocr_image_line",
+      "source_split": "validation",
+      "source_row_index": 23,
+      "answer": "សុបិនជនភៀសខ្លួនស៊ីរី ក្លាយជាការពិត ដោយ",
+      "prediction": "សុបិនជនភៀសខ្លួនស៊ីរី កលាយជាការពិត ដោយ",
+      "exact_match": false
+    },
+    {
+      "source": "Chanrith123333/khmer_english_ocr_image_line",
+      "source_split": "validation",
+      "source_row_index": 24,
+      "answer": "# Entry 16452 - TD1_ID_CARD",
+      "prediction": "# Entry 16452 - TD1_ID_CARD",
+      "exact_match": true
+    },
+    {
+      "source": "Chanrith123333/khmer_english_ocr_image_line",
+      "source_split": "validation",
+      "source_row_index": 25,
+      "answer": "ខាងត្បូងលោកKlissadaRatanaprukបានមានប្រសាសន៍ថា",
+      "prediction": "ខាងត្បូងលោកNlissadaRatanaprukបានមានប្រសាសន៍ថា",
+      "exact_match": false
+    },
+    {
+      "source": "Chanrith123333/khmer_english_ocr_image_line",
+      "source_split": "validation",
+      "source_row_index": 26,
+      "answer": "នេះកើតឡើង។ លោកភុនបាន",
+      "prediction": "នេះកើតឡើង។ លោកភុនបាន",
+      "exact_match": true
+    },
+    {
+      "source": "Chanrith123333/khmer_english_ocr_image_line",
+      "source_split": "validation",
+      "source_row_index": 27,
+      "answer": "ខ្លាំងក្លានិងងប់ងល់ដោយជើង",
+      "prediction": "ខ្លាំងក្លានិងងប់ងល់ដោយជើង",
+      "exact_match": true
+    },
+    {
+      "source": "Chanrith123333/khmer_english_ocr_image_line",
+      "source_split": "validation",
+      "source_row_index": 28,
+      "answer": "ទៅលក់នៅខេត្តកំពង់ស្ពឺដោយ",
+      "prediction": "ទៅលក់នៅខេត្តកំពង់ស្លឺដោយ",
+      "exact_match": false
+    },
+    {
+      "source": "Chanrith123333/khmer_english_ocr_image_line",
+      "source_split": "validation",
+      "source_row_index": 29,
+      "answer": "2019 at 9:37 pmbest free slots vegas",
+      "prediction": "2019 at 9:37 pmbest free slots vegs",
+      "exact_match": false
+    },
+    {
+      "source": "Chanrith123333/khmer_english_ocr_image_line",
+      "source_split": "validation",
+      "source_row_index": 30,
+      "answer": "រស់ជាតិតែក្រូចឆ្មារទឹកឃ្មុំ ពី",
+      "prediction": "រស់ជាតិតែក្រូចឆ្មារទីក្មុំី",
+      "exact_match": false
+    },
+    {
+      "source": "Chanrith123333/khmer_english_ocr_image_line",
+      "source_split": "validation",
+      "source_row_index": 31,
+      "answer": "ក្រុមហ៊ុនឈានមុខគេក្នុងការផ្តល់",
+      "prediction": "ក្រុមហ៊ុនឈានមុខគេក្នុងការផ្តល់",
+      "exact_match": true
+    },
+    {
+      "source": "Chanrith123333/khmer_english_ocr_image_line",
+      "source_split": "validation",
+      "source_row_index": 32,
+      "answer": "លោកអ្នក។** ឧទាហរណ៍ខាងលើ",
+      "prediction": "លោកអ្នក។* ឧទាហរណ៍ខាងលើ",
+      "exact_match": false
+    },
+    {
+      "source": "Chanrith123333/khmer_english_ocr_image_line",
+      "source_split": "validation",
+      "source_row_index": 33,
+      "answer": "ប្រទេសប្រេស៊ីល បានថ្លែងថា \"ខ្ញុំ",
+      "prediction": "ប្រទេសប្រេស៊ីល បានថ្លែងថា \"ខញុំ",
+      "exact_match": false
+    },
+    {
+      "source": "Chanrith123333/khmer_english_ocr_image_line",
+      "source_split": "validation",
+      "source_row_index": 34,
+      "answer": "7003217M3601109THAY8T8B9A7IFZ0",
+      "prediction": "7003217M3601109THAY8T8B9A7IFZ0",
+      "exact_match": true
+    },
+    {
+      "source": "Chanrith123333/khmer_english_ocr_image_line",
+      "source_split": "validation",
+      "source_row_index": 35,
+      "answer": "ម៉ី ជាដើម ក៏សុទ្ធតែធ្លាប់ជា",
+      "prediction": "ម៉ី ជាដើម ក៏សុទ្ធតែធ្លាប់ជា",
+      "exact_match": true
+    },
+    {
+      "source": "Chanrith123333/khmer_english_ocr_image_line",
+      "source_split": "validation",
+      "source_row_index": 36,
+      "answer": "ខ្ញុំក៏ធ្វើដើម្បីសន្លឹកឆ្នោត",
+      "prediction": "ខ្ញុំ៏ធ្វើដើម្បីសន្លឹកឆ្នោត",
+      "exact_match": false
+    },
+    {
+      "source": "Chanrith123333/khmer_english_ocr_image_line",
+      "source_split": "validation",
+      "source_row_index": 37,
+      "answer": "ប៉ុន្តែស្ថិតក្នុងតួម៉ាស៊ីនតែ",
+      "prediction": "ប៉ុន្តែស្ថិតក្នុងតួម៉ាស៊ីនតែ",
+      "exact_match": true
+    },
+    {
+      "source": "Chanrith123333/khmer_english_ocr_image_line",
+      "source_split": "validation",
+      "source_row_index": 38,
+      "answer": "៖ លោក រស់ គឹមសៀង អតីត",
+      "prediction": "៖ លោក រស់ គឹមសៀង អតីត",
+      "exact_match": true
+    },
+    {
+      "source": "Chanrith123333/khmer_english_ocr_image_line",
+      "source_split": "validation",
+      "source_row_index": 39,
+      "answer": "ពិត តាមដីកាកោះរបស់ព្រះរាជអាជ្ញា",
+      "prediction": "ពិត តាមដីកាកោះរបស់ព្រះរាជអាជ្ញា",
+      "exact_match": true
+    }
+  ]
+}

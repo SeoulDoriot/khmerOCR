@@ -1,0 +1,338 @@
+{
+  "note": "Selected for Transformer success; biased demonstration, not a fair benchmark. Shared NFC/rounded-width preprocessing may differ from original recurrent training. Stored CER values use different validation procedures and are not comparable.",
+  "models": [
+    {
+      "architecture": "bilstm",
+      "step": 58000,
+      "stored_cer": 0.003534956794972506,
+      "strict_load": true,
+      "selected_demo_exact_matches": 14,
+      "examples": 20,
+      "predictions": [
+        {
+          "image": "example_01.png",
+          "answer": "សៅភារ៉ា ពលរដ្ឋខ្មែរភាគតិច",
+          "prediction": "សៅភារ៉ា ពលរដ្ឋខ្មែរភាគតិច"
+        },
+        {
+          "image": "example_02.png",
+          "answer": "ឈប់ទិញទំនិញ និងឈប់មកវិនិយោគ",
+          "prediction": "ឈប់ទិញទំនិញ និងឈប់មកវិនិយោគ"
+        },
+        {
+          "image": "example_03.png",
+          "answer": "ប្រក្រតី និងបណ្តាលឲ្យមានជំងឺមហារីក",
+          "prediction": "ប្រក្រតី និងបណ្តាលឲ្យមានជំងឺមហារីក"
+        },
+        {
+          "image": "example_04.png",
+          "answer": "២៥%បាត់បង់ញាណក្បាលដោះក្រោយពី",
+          "prediction": "២៥%បាត់បង់ញាណក្បាលដោះក្រោយពី"
+        },
+        {
+          "image": "example_05.png",
+          "answer": "សែនជីដូនជីតា របស់ជនជាតិ Ha",
+          "prediction": "សែនជីដូនជីតា របស់ជនជាតិ Ha"
+        },
+        {
+          "image": "example_06.png",
+          "answer": "បានរៀបចំគោលនយោបាយស្តីពីសុខភាព",
+          "prediction": "បានរៀបចំគោលនយោបាយស្តីពីសុខភាព"
+        },
+        {
+          "image": "example_07.png",
+          "answer": "ដោះស្រាយបញ្ហានានា ពាក់ព័ន្ធនឹងឧបាយកល",
+          "prediction": "ដោះស្រាយបញ្ហានានា ពាក់ព័ន្ធនឹងឧបាយកល"
+        },
+        {
+          "image": "example_08.png",
+          "answer": "វាជាការសំខាន់ណាស់សម្រាប់ប្រទេស",
+          "prediction": "វាជាការសំខាន់ណាស់សម្រាប់ប្រទេស"
+        },
+        {
+          "image": "example_09.png",
+          "answer": "អនិតិជន ក្រសួងមហាផ្ទៃ បានចុះបង្ក្រាបហាង",
+          "prediction": "អនិតិជន ក្រសួងមហាផ្ទៃ បានចុះបង្ក្រាបហាង"
+        },
+        {
+          "image": "example_10.png",
+          "answer": "នគរបាលទឹកល្អក់៣ ហើយនៅម៉ោង",
+          "prediction": "នគរបាលទឹកល្អក ់៣ហើយនៅម៉ោង"
+        },
+        {
+          "image": "example_11.png",
+          "answer": "។ ចំណែកអ្នកថ្មើជើង ឈ្មោះ ហើយ",
+          "prediction": "។ ចំណែកអ្នកថ្មើជើង ឈ្មោ ះហើយ"
+        },
+        {
+          "image": "example_12.png",
+          "answer": "ប្រតិភូរបស់ឯកឧត្តម។ ក្នុងន័យ",
+          "prediction": "ប្រតិភួរបស់ឯកឧត្តម ។ក្នុងន័យ"
+        },
+        {
+          "image": "example_13.png",
+          "answer": "បៀ APK ទាញយក APK លេង Poker",
+          "prediction": "បៀ AHPទាញយក APPលេង Peeor"
+        },
+        {
+          "image": "example_14.png",
+          "answer": "បើមិនយល់ទាស់ទេសុំ",
+          "prediction": "បើមិនយល់ទាស់ទេសុំ"
+        },
+        {
+          "image": "example_15.png",
+          "answer": "នឹងបន្តចូលរួមឲ្យកាន់តែសំរេច",
+          "prediction": "នឹងបន្តចូលរួមឲ្យកាន់តែសំរេច"
+        },
+        {
+          "image": "example_16.png",
+          "answer": "សម្រស់ដ៏ទាក់ទាញរបស់នាង ខណៈ",
+          "prediction": "សម្រស់ដ៏ទាក់ទាញរបស់នាង ខណៈ"
+        },
+        {
+          "image": "example_17.png",
+          "answer": "ពីធនាគារអភិវឌ្ឍន៍អាស៊ីនៃ គម្រោង",
+          "prediction": "ពីធនាគារអភិវឌ្ឍន៍អាស៊ីនៃ គម្រោង"
+        },
+        {
+          "image": "example_18.png",
+          "answer": "គឺជាអត្ថប្រយោជន៍ដែលបានមកពីការទទួលទាន",
+          "prediction": "គឺជាអត្ថប្រយោជន៍ដែលបានមកពីការទទួលទាន"
+        },
+        {
+          "image": "example_19.png",
+          "answer": "ដែលទទួលបាន Android Q Beta 3",
+          "prediction": "ដែលទទួលបាន Aadiioo"
+        },
+        {
+          "image": "example_20.png",
+          "answer": "# Entry 16452 - TD1_ID_CARD",
+          "prediction": "# Entty 16452 TD1DCARD"
+        }
+      ],
+      "sha256": "20e080ec0cf0aed638fa72bd4a0613f43db4b0adcb52a78a2f342cb103a167c4"
+    },
+    {
+      "architecture": "bigru",
+      "step": 8500,
+      "stored_cer": 0.2627805486284289,
+      "strict_load": true,
+      "selected_demo_exact_matches": 6,
+      "examples": 20,
+      "predictions": [
+        {
+          "image": "example_01.png",
+          "answer": "សៅភារ៉ា ពលរដ្ឋខ្មែរភាគតិច",
+          "prediction": "សៅការ៉ា ពលរដ្ឋខ្មែរភាគតិច"
+        },
+        {
+          "image": "example_02.png",
+          "answer": "ឈប់ទិញទំនិញ និងឈប់មកវិនិយោគ",
+          "prediction": "ឈប់ទិញទំនិញ និងឈប់មកវិនិយោគ"
+        },
+        {
+          "image": "example_03.png",
+          "answer": "ប្រក្រតី និងបណ្តាលឲ្យមានជំងឺមហារីក",
+          "prediction": "ប្រក្រី និងបណ្ដាឈឲ្យមានជំងឺមហារីក"
+        },
+        {
+          "image": "example_04.png",
+          "answer": "២៥%បាត់បង់ញាណក្បាលដោះក្រោយពី",
+          "prediction": "២៥បាត់បង់ញាណក្បាលដោះក្រោយពី"
+        },
+        {
+          "image": "example_05.png",
+          "answer": "សែនជីដូនជីតា របស់ជនជាតិ Ha",
+          "prediction": "សែនជីដូនជីតា របស់ជនជាតិ Ha"
+        },
+        {
+          "image": "example_06.png",
+          "answer": "បានរៀបចំគោលនយោបាយស្តីពីសុខភាព",
+          "prediction": "បានរៀបចំតោលនយោបាយស្តីពីសុខភាព"
+        },
+        {
+          "image": "example_07.png",
+          "answer": "ដោះស្រាយបញ្ហានានា ពាក់ព័ន្ធនឹងឧបាយកល",
+          "prediction": "ដោះស្រាយបញ្ហានានាពាក់ព័ន្ធនឹងឧបាយកល"
+        },
+        {
+          "image": "example_08.png",
+          "answer": "វាជាការសំខាន់ណាស់សម្រាប់ប្រទេស",
+          "prediction": "វាជាការស់ខាន់ណាស់សម្រាប់ប្រទេស"
+        },
+        {
+          "image": "example_09.png",
+          "answer": "អនិតិជន ក្រសួងមហាផ្ទៃ បានចុះបង្ក្រាបហាង",
+          "prediction": "អនិតិជន ក្រួងហាផ្ទៃបានចុះង្រាបហាង"
+        },
+        {
+          "image": "example_10.png",
+          "answer": "នគរបាលទឹកល្អក់៣ ហើយនៅម៉ោង",
+          "prediction": "នតរបាលទឹកល្អក់៣ ហើយនៅម៉ោង"
+        },
+        {
+          "image": "example_11.png",
+          "answer": "។ ចំណែកអ្នកថ្មើជើង ឈ្មោះ ហើយ",
+          "prediction": "។ ចំណែកអនកថ្មើជីង ឈ្មោះ ហើយ"
+        },
+        {
+          "image": "example_12.png",
+          "answer": "ប្រតិភូរបស់ឯកឧត្តម។ ក្នុងន័យ",
+          "prediction": "ប្រតិភូរបស់ឯកឧត្តម។ ក្នុងន័យ"
+        },
+        {
+          "image": "example_13.png",
+          "answer": "បៀ APK ទាញយក APK លេង Poker",
+          "prediction": "បៀ APK ទាញយក APK លេង Poker"
+        },
+        {
+          "image": "example_14.png",
+          "answer": "បើមិនយល់ទាស់ទេសុំ",
+          "prediction": "បើមិនយល់ទាស់ទេសុំ"
+        },
+        {
+          "image": "example_15.png",
+          "answer": "នឹងបន្តចូលរួមឲ្យកាន់តែសំរេច",
+          "prediction": "នឹងបន្តចូលរួមឲ្យកាន់តែស់រច"
+        },
+        {
+          "image": "example_16.png",
+          "answer": "សម្រស់ដ៏ទាក់ទាញរបស់នាង ខណៈ",
+          "prediction": "សម្រស់ដ៏ទាក់ទាញរបស់នាងខណៈ"
+        },
+        {
+          "image": "example_17.png",
+          "answer": "ពីធនាគារអភិវឌ្ឍន៍អាស៊ីនៃ គម្រោង",
+          "prediction": "ពីធនាគារអភិវឌ្ឍន៍អាស៊ីនៃ គម្រោង"
+        },
+        {
+          "image": "example_18.png",
+          "answer": "គឺជាអត្ថប្រយោជន៍ដែលបានមកពីការទទួលទាន",
+          "prediction": "គឺជាអត្ថប្រយោជន៍ដែលបានមកពីកាវទទួលទាន"
+        },
+        {
+          "image": "example_19.png",
+          "answer": "ដែលទទួលបាន Android Q Beta 3",
+          "prediction": "ដែលទទួលបាន Anilod a 8ataវ"
+        },
+        {
+          "image": "example_20.png",
+          "answer": "# Entry 16452 - TD1_ID_CARD",
+          "prediction": "# Entry 16452 - TDllD CARO"
+        }
+      ],
+      "sha256": "99327ee9b9f19f58ce69a7adb4bc10bd1b2ae3277ff2febb4503ca287adb67eb"
+    },
+    {
+      "architecture": "transformer",
+      "step": 87000,
+      "stored_cer": 0.08225544647317348,
+      "strict_load": true,
+      "selected_demo_exact_matches": 20,
+      "examples": 20,
+      "predictions": [
+        {
+          "image": "example_01.png",
+          "answer": "សៅភារ៉ា ពលរដ្ឋខ្មែរភាគតិច",
+          "prediction": "សៅភារ៉ា ពលរដ្ឋខ្មែរភាគតិច"
+        },
+        {
+          "image": "example_02.png",
+          "answer": "ឈប់ទិញទំនិញ និងឈប់មកវិនិយោគ",
+          "prediction": "ឈប់ទិញទំនិញ និងឈប់មកវិនិយោគ"
+        },
+        {
+          "image": "example_03.png",
+          "answer": "ប្រក្រតី និងបណ្តាលឲ្យមានជំងឺមហារីក",
+          "prediction": "ប្រក្រតី និងបណ្តាលឲ្យមានជំងឺមហារីក"
+        },
+        {
+          "image": "example_04.png",
+          "answer": "២៥%បាត់បង់ញាណក្បាលដោះក្រោយពី",
+          "prediction": "២៥%បាត់បង់ញាណក្បាលដោះក្រោយពី"
+        },
+        {
+          "image": "example_05.png",
+          "answer": "សែនជីដូនជីតា របស់ជនជាតិ Ha",
+          "prediction": "សែនជីដូនជីតា របស់ជនជាតិ Ha"
+        },
+        {
+          "image": "example_06.png",
+          "answer": "បានរៀបចំគោលនយោបាយស្តីពីសុខភាព",
+          "prediction": "បានរៀបចំគោលនយោបាយស្តីពីសុខភាព"
+        },
+        {
+          "image": "example_07.png",
+          "answer": "ដោះស្រាយបញ្ហានានា ពាក់ព័ន្ធនឹងឧបាយកល",
+          "prediction": "ដោះស្រាយបញ្ហានានា ពាក់ព័ន្ធនឹងឧបាយកល"
+        },
+        {
+          "image": "example_08.png",
+          "answer": "វាជាការសំខាន់ណាស់សម្រាប់ប្រទេស",
+          "prediction": "វាជាការសំខាន់ណាស់សម្រាប់ប្រទេស"
+        },
+        {
+          "image": "example_09.png",
+          "answer": "អនិតិជន ក្រសួងមហាផ្ទៃ បានចុះបង្ក្រាបហាង",
+          "prediction": "អនិតិជន ក្រសួងមហាផ្ទៃ បានចុះបង្ក្រាបហាង"
+        },
+        {
+          "image": "example_10.png",
+          "answer": "នគរបាលទឹកល្អក់៣ ហើយនៅម៉ោង",
+          "prediction": "នគរបាលទឹកល្អក់៣ ហើយនៅម៉ោង"
+        },
+        {
+          "image": "example_11.png",
+          "answer": "។ ចំណែកអ្នកថ្មើជើង ឈ្មោះ ហើយ",
+          "prediction": "។ ចំណែកអ្នកថ្មើជើង ឈ្មោះ ហើយ"
+        },
+        {
+          "image": "example_12.png",
+          "answer": "ប្រតិភូរបស់ឯកឧត្តម។ ក្នុងន័យ",
+          "prediction": "ប្រតិភូរបស់ឯកឧត្តម។ ក្នុងន័យ"
+        },
+        {
+          "image": "example_13.png",
+          "answer": "បៀ APK ទាញយក APK លេង Poker",
+          "prediction": "បៀ APK ទាញយក APK លេង Poker"
+        },
+        {
+          "image": "example_14.png",
+          "answer": "បើមិនយល់ទាស់ទេសុំ",
+          "prediction": "បើមិនយល់ទាស់ទេសុំ"
+        },
+        {
+          "image": "example_15.png",
+          "answer": "នឹងបន្តចូលរួមឲ្យកាន់តែសំរេច",
+          "prediction": "នឹងបន្តចូលរួមឲ្យកាន់តែសំរេច"
+        },
+        {
+          "image": "example_16.png",
+          "answer": "សម្រស់ដ៏ទាក់ទាញរបស់នាង ខណៈ",
+          "prediction": "សម្រស់ដ៏ទាក់ទាញរបស់នាង ខណៈ"
+        },
+        {
+          "image": "example_17.png",
+          "answer": "ពីធនាគារអភិវឌ្ឍន៍អាស៊ីនៃ គម្រោង",
+          "prediction": "ពីធនាគារអភិវឌ្ឍន៍អាស៊ីនៃ គម្រោង"
+        },
+        {
+          "image": "example_18.png",
+          "answer": "គឺជាអត្ថប្រយោជន៍ដែលបានមកពីការទទួលទាន",
+          "prediction": "គឺជាអត្ថប្រយោជន៍ដែលបានមកពីការទទួលទាន"
+        },
+        {
+          "image": "example_19.png",
+          "answer": "ដែលទទួលបាន Android Q Beta 3",
+          "prediction": "ដែលទទួលបាន Android Q Beta 3"
+        },
+        {
+          "image": "example_20.png",
+          "answer": "# Entry 16452 - TD1_ID_CARD",
+          "prediction": "# Entry 16452 - TD1_ID_CARD"
+        }
+      ],
+      "sha256": "d6f24492cd6ce2673af9f1fcbea1cdb8255cd71f28307bbd979bce566bbf0bbb"
+    }
+  ]
+}
