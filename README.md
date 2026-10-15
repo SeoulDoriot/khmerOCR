@@ -8,6 +8,11 @@ identical data, with identical seeds, and scored on one frozen five-domain test
 set, so the comparison measures the approaches rather than the experimental
 conditions.
 
+**Further reading:** [`EXPERIMENTS.md`](EXPERIMENTS.md) is the experiment log —
+the generalization-gap result, the continued-training ablation, the
+aspect-ratio analysis, and the bugs that cost real training runs.
+[`IMPROVEMENT_PLAN.md`](IMPROVEMENT_PLAN.md) ranks what to do next.
+
 ---
 
 ## 1. Problem

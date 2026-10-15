@@ -21,6 +21,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 from seeds import set_all_seeds
 from train_mac import CRNN, prep, edit, pick_device
 from models import AttnOCR
+from normalize import normalize_khmer
 
 ROOT = Path(__file__).resolve().parent.parent
 
@@ -31,6 +32,8 @@ MODELS = [
     ("handwriting",       "checkpoints/handwriting.pt",       "crnn", "A2 + handwriting fine-tune"),
     ("baseline_pretrained", str(Path.home()/"Downloads"/"quickstart2_crnn.pt"), "crnn",
      "Pretrained printed specialist"),
+    ("v7_63800",           "checkpoints/v7_63800.pt",          "crnn", "Single-corpus, 63.8k steps"),
+    ("v8_28800",           "checkpoints/v8_28800.pt",          "crnn", "v7 + 28.8k joint multi-corpus steps"),
 ]
 
 
@@ -72,13 +75,22 @@ def run(model, chars, arch, items, dev, bs=48):
         golds += [it["text"] for it in chunk]
     cer = sum(edit(p, g) for p, g in zip(preds, golds)) / max(sum(len(g) for g in golds), 1)
     wer = sum(p != g for p, g in zip(preds, golds)) / max(len(golds), 1)
-    return cer, wer, preds, golds
+    # Khmer encodes visually identical text several ways; normalizing both sides
+    # measures recognition instead of codepoint ordering. Reported separately so
+    # the raw number stays visible.
+    npreds = [normalize_khmer(x) for x in preds]
+    ngolds = [normalize_khmer(x) for x in golds]
+    ncer = sum(edit(p, g) for p, g in zip(npreds, ngolds)) / max(sum(len(g) for g in ngolds), 1)
+    nwer = sum(p != g for p, g in zip(npreds, ngolds)) / max(len(ngolds), 1)
+    return cer, wer, preds, golds, {"cer_norm": ncer, "wer_norm": nwer}
 
 
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--test-set", default=str(ROOT / "results" / "test_set.pt"))
     ap.add_argument("--out", default=str(ROOT / "results" / "evaluation.json"))
+    ap.add_argument("--only", default=None,
+                    help="comma-separated model tags to score (default: all)")
     a = ap.parse_args()
 
     set_all_seeds(42)
@@ -91,8 +103,11 @@ def main():
     print(f"frozen test set: {len(items)} samples, {len(domains)} domains")
     print(f"never trained on: {', '.join(sorted(unseen))}\n")
 
+    keep = set(a.only.split(",")) if a.only else None
     table = {}
     for tag, path, arch, desc in MODELS:
+        if keep and tag not in keep:
+            continue
         p = Path(path)
         if not p.is_absolute():
             p = ROOT / p
@@ -106,15 +121,16 @@ def main():
                "params": meta.get("params", sum(x.numel() for x in model.parameters())),
                "train_minutes": meta.get("train_minutes"),
                "device": meta.get("device", str(dev)), "domains": {}}
-        cer_all, wer_all, _, _ = run(model, chars, arch, items, dev)
-        row["overall"] = {"cer": cer_all, "wer": wer_all}
+        cer_all, wer_all, _, _, nrm = run(model, chars, arch, items, dev)
+        row["overall"] = {"cer": cer_all, "wer": wer_all, **nrm}
         for d in domains:
             sub = [it for it in items if it["domain"] == d]
-            c, w, _, _ = run(model, chars, arch, sub, dev)
+            c, w, _, _, dn = run(model, chars, arch, sub, dev)
             row["domains"][d] = {"cer": c, "wer": w, "n": len(sub),
-                                 "seen_in_training": sub[0]["seen_in_training"]}
+                                 "seen_in_training": sub[0]["seen_in_training"], **dn}
         table[tag] = row
-        print(f"{tag:<22} CER {cer_all:.4f}  WER {wer_all:.4f}")
+        print(f"{tag:<22} CER {cer_all:.4f}  WER {wer_all:.4f}"
+              f"  (normalized CER {nrm['cer_norm']:.4f})")
 
     Path(a.out).write_text(json.dumps({"test_set": a.test_set, "n": len(items),
                                        "results": table}, indent=2))

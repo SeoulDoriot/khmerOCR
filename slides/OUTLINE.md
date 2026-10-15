@@ -161,6 +161,66 @@ Small text falls off a cliff: 20px → 16.34%, **16px → 40.22%**.
 > **Say:** we first blamed image height. The full-set correlation refuted it.
 > Both of these are preprocessing, fixable without retraining.
 
+
+---
+
+### 13b — Finding 6: scale makes it NARROWER, not better
+
+`v7_63800` — 63,800 steps, 16x more training than A1/A2/A3.
+
+| domain | CER | exact lines |
+|---|---|---|
+| printed_A *(its corpus)* | **0.33%** | **187/200** |
+| printed_C | 55.69% | 3/200 |
+| printed_B | 76.86% | 1/200 |
+| camera | 86.66% | 2/200 |
+| handwriting | 87.70% | 5/200 |
+
+From 39,400 → 63,800 steps: `printed_A` 0.40% → 0.33%. **Every other domain
+flat.**
+
+> **Say:** 187 perfect lines on one domain, one on another. The model learned a
+> *renderer*, not a *script*. Our own methodology predicted this before we
+> measured it. More steps lowered the number that was already good and moved
+> nothing else — the corpus is the ceiling, not the compute.
+
+---
+
+### 13c — Finding 7: small-text training works
+
+Canvas expansion — grow the image, keep the text, so the text arrives smaller.
+
+| | before | after |
+|---|---|---|
+| small text (expanded) | 62.21% | **26.24%** |
+| normal text | 8.24% | **6.90%** |
+
+8 of 8 sample images improved. The 20,000-step Kaggle version reached
+**0.59% CER**, better than the 0.65% base it started from.
+
+> **Say:** the augmentation acted as regularisation — it got better at normal
+> text while learning small text. This is the one experiment where we changed
+> the *data* rather than the *amount*, and it is the only one that moved a
+> number that mattered.
+
+---
+
+### 13d — What would fix it (and what we measured)
+
+Decoding tricks, measured on v7_63800:
+
+| | printed_A | camera | handwriting |
+|---|---|---|---|
+| greedy | 0.44% | 80.75% | 81.08% |
+| + Khmer normalisation | **0.37%** | 81.09% | 80.87% |
+| + test-time augmentation | 0.55% | 80.75% | 81.08% |
+
+> **Say:** normalisation is free and removes ~16% of remaining errors — but
+> nothing in decoding moves a broken domain. 80% stays 80%. The fix is joint
+> multi-corpus training: `train.py` supports per-corpus weights and every run so
+> far used `--weights 1.0` on one corpus. That is the next experiment, and it is
+> in IMPROVEMENT_PLAN.md.
+
 ---
 
 ### 14 — Limitations and next steps

@@ -14,7 +14,7 @@ new one. Resuming also restores optimizer and LR-schedule state, so the run
 picks up mid-curve instead of jumping back to peak learning rate (doing that
 previously undid 6000 steps of progress).
 """
-import argparse, os, random, signal, time, unicodedata
+import argparse, io, os, random, signal, time, unicodedata
 import numpy as np, torch, torch.nn as nn
 from PIL import Image
 from torch.utils.data import DataLoader, IterableDataset
@@ -82,9 +82,22 @@ class CRNN(nn.Module):
 H, W = 64, 512
 TEXT_KEYS = ["text", "label", "sentence", "transcription", "ground_truth", "caption"]
 IMG_KEYS = ["image", "img", "picture"]
+# Default printed mix. 62k-images-khmer-printed-dataset USED TO BE HERE at 0.20
+# -- it is `printed_C` in the frozen test set, so training on it would have made
+# that column meaningless. It is in HELD_OUT below and the run now refuses it.
 REPOS = ["Chanrith123333/khmer_english_ocr_image_line", "SoyVitou/KhmerSynthetic1M",
-         "KimkosalYon/khmer-ocr-200k-siemreap-arial", "SoyVitou/62k-images-khmer-printed-dataset"]
-WEIGHTS = [0.35, 0.30, 0.15, 0.20]
+         "KimkosalYon/khmer-ocr-200k-siemreap-arial"]
+WEIGHTS = [0.40, 0.35, 0.25]
+
+# Domains the frozen test set measures. Never train on these.
+HELD_OUT = {"SoyVitou/62k-images-khmer-printed-dataset",   # printed_C
+            "SoyVitou/KhmerST-Dataset-OCR-Cropped"}        # camera
+
+# Handwriting is 4.2k images against 12.1M printed -- a 2900x imbalance, which at
+# uniform sampling is indistinguishable from never seeing it. It therefore gets an
+# explicit batch share instead of a corpus weight, and only the seed-42 training
+# 80%: the other 840 are the `handwriting` column of the frozen test set.
+HAND_REPO = "SoyVitou/khmer-handwritten-dataset-4.2k"
 
 def prep(img):
     img = img.convert("L"); w, h = img.size
@@ -111,9 +124,42 @@ def row_sample(row, stoi, max_len, ko):
     return row[ik], l, ids
 
 
+def hand_train_rows(stoi, max_len):
+    """The 80% of the handwriting corpus that is NOT in the frozen test set.
+
+    Reproduces make_testset.py / finetune_handwriting.py exactly: same field
+    order, same filters (no khmer-ratio filter here), Random(42) shuffle, first
+    20% is test. Any deviation silently leaks the test set into training, so this
+    must stay a mirror of those two functions.
+    """
+    from datasets import load_dataset
+    rows = []
+    for row in load_dataset(HAND_REPO, split="train", streaming=True):
+        tk = next((k for k in TEXT_KEYS if k in row), None)
+        ik = next((k for k in IMG_KEYS if k in row), None)
+        if not tk or not ik: continue
+        lbl = normalize_khmer(row[tk])
+        if not lbl or len(lbl) > max_len: continue
+        rows.append((row[ik], lbl))
+    rng = random.Random(42)                    # MUST match make_testset.py
+    idx = list(range(len(rows))); rng.shuffle(idx)
+    cut = int(len(idx) * 0.2)
+    out = []
+    for i in idx[cut:]:                        # [:cut] is the held-out test set
+        img, lbl = rows[i]
+        ids = [stoi[c] for c in lbl if c in stoi]
+        if not ids: continue
+        buf = io.BytesIO()
+        try: img.convert("L").save(buf, "JPEG", quality=95)
+        except Exception: continue
+        out.append((buf.getvalue(), lbl, ids))
+    return out
+
+
 class MixStream(IterableDataset):
-    def __init__(s, repos, w, stoi, ml, ko, buf, seed, skip):
+    def __init__(s, repos, w, stoi, ml, ko, buf, seed, skip, mem=None, mem_w=0.0):
         s.repos, s.w, s.stoi, s.ml, s.ko, s.buf, s.seed, s.skip = repos, w, stoi, ml, ko, buf, seed, skip
+        s.mem, s.mem_w = mem or [], mem_w
     def __iter__(s):
         from datasets import load_dataset
         info = torch.utils.data.get_worker_info()
@@ -128,9 +174,19 @@ class MixStream(IterableDataset):
                 its.append(iter(d)); ws.append(w)
             except Exception as e:
                 if wid == 0: print(f"  [skip] {r}: {e}", flush=True)
-        if not its: return
+        # the in-memory handwriting split is source index -1: finite, so it is
+        # resampled with replacement rather than exhausted like a stream
+        mem_w = s.mem_w if s.mem else 0.0
+        if not its and not s.mem: return
         sk = 0
-        while its:
+        while its or s.mem:
+            if s.mem and rng.random() < mem_w:
+                b, lbl, ids = s.mem[rng.randrange(len(s.mem))]
+                try: t = to_tensor(prep(Image.open(io.BytesIO(b))), aug=True)
+                except Exception: continue
+                yield t, torch.tensor(ids), lbl
+                continue
+            if not its: continue
             i = rng.choices(range(len(its)), weights=ws)[0]
             try: row = next(its[i])
             except StopIteration: its.pop(i); ws.pop(i); continue
@@ -173,7 +229,25 @@ def main():
     ap.add_argument("--save-every", type=int, default=500)
     ap.add_argument("--eval-every", type=int, default=2000)
     ap.add_argument("--max-hours", type=float, default=11.0)
+    ap.add_argument("--repos", default=",".join(REPOS),
+                    help="comma-separated printed corpora to mix")
+    ap.add_argument("--weights", default=",".join(str(w) for w in WEIGHTS),
+                    help="sampling weights, one per --repos entry")
+    ap.add_argument("--hand-frac", type=float, default=0.15,
+                    help="share of each batch drawn from the handwriting train "
+                         "split (0 disables it)")
     a = ap.parse_args()
+
+    repos = [r.strip() for r in a.repos.split(",") if r.strip()]
+    weights = [float(x) for x in a.weights.split(",")]
+    if len(repos) != len(weights):
+        raise SystemExit(f"--repos has {len(repos)} entries but --weights has {len(weights)}")
+    bad = HELD_OUT.intersection(repos) | ({HAND_REPO} & set(repos))
+    if bad:
+        raise SystemExit("these corpora are held-out test domains and must not be "
+                         "trained on: " + ", ".join(sorted(bad)) +
+                         ("\n(use --hand-frac for handwriting; it trains on the "
+                          "seed-42 80% split only)" if HAND_REPO in bad else ""))
 
     assert 2 * a.max_len <= W // 4
     dev = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -204,8 +278,8 @@ def main():
 
     print(f"building eval set ({a.val_size}) ...", flush=True)
     from datasets import load_dataset
-    val, n, per = [], 0, max(1, a.val_size // len(REPOS))
-    for r in REPOS:
+    val, n, per = [], 0, max(1, a.val_size // len(repos))
+    for r in repos:
         try: d = load_dataset(r, split="train", streaming=True)
         except Exception as e: print(f"  [skip] {r}: {e}"); continue
         got = 0
@@ -220,8 +294,21 @@ def main():
         print(f"  {got:4d}  {r}", flush=True)
     print(f"  total {len(val)}")
 
-    tl = DataLoader(MixStream(REPOS, WEIGHTS, stoi, a.max_len, a.khmer_only,
-                              a.shuffle_buffer, seed, per),
+    hand = []
+    if a.hand_frac > 0:
+        print(f"\nloading handwriting train split ({HAND_REPO}) ...", flush=True)
+        hand = hand_train_rows(stoi, a.max_len)
+        print(f"  {len(hand)} images (the held-out 840 are excluded)", flush=True)
+        if not hand:
+            raise SystemExit("handwriting split came back empty -- check Internet "
+                             "is on, or pass --hand-frac 0")
+    print("\nbatch mix:")
+    for r, w in zip(repos, weights):
+        print(f"  {w * (1 - a.hand_frac) / sum(weights):6.1%}  {r}")
+    if hand: print(f"  {a.hand_frac:6.1%}  {HAND_REPO} (train split)")
+
+    tl = DataLoader(MixStream(repos, weights, stoi, a.max_len, a.khmer_only,
+                              a.shuffle_buffer, seed, per, hand, a.hand_frac),
                     batch_size=a.batch_size, collate_fn=collate,
                     num_workers=a.workers, pin_memory=True,
                     persistent_workers=a.workers > 0)

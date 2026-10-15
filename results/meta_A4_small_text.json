@@ -1,0 +1,17 @@
+{
+  "tag": "A4_small_text",
+  "arch": "crnn",
+  "strategy": "transfer",
+  "params": 9016755,
+  "steps": 2231,
+  "batch_size": 32,
+  "lr": 5e-05,
+  "best_val_cer": 0.1513866451265482,
+  "train_minutes": 531.6,
+  "device": "mps",
+  "hardware": "macOS-27.0-arm64-arm-64bit",
+  "torch": "2.13.0",
+  "seed": 42,
+  "train_n": 78691,
+  "val_n": 1000
+}

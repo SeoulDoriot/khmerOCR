@@ -1,0 +1,116 @@
+{
+  "test_set": "/Users/seouldorito/khmer-ocr/results/test_set.pt",
+  "n": 1840,
+  "results": {
+    "v7_63800": {
+      "desc": "Single-corpus, 63.8k steps",
+      "arch": "crnn",
+      "params": 9016755,
+      "train_minutes": null,
+      "device": "mps",
+      "domains": {
+        "camera": {
+          "cer": 0.7711663706335109,
+          "wer": 0.99,
+          "n": 200,
+          "seen_in_training": false,
+          "cer_norm": 0.7732386027235051,
+          "wer_norm": 0.985
+        },
+        "handwriting": {
+          "cer": 0.8032931121166416,
+          "wer": 0.9726190476190476,
+          "n": 840,
+          "seen_in_training": false,
+          "cer_norm": 0.8026646556058321,
+          "wer_norm": 0.9726190476190476
+        },
+        "printed_A": {
+          "cer": 0.0040401834461672856,
+          "wer": 0.08666666666666667,
+          "n": 300,
+          "seen_in_training": true,
+          "cer_norm": 0.003930989298973575,
+          "wer_norm": 0.08333333333333333
+        },
+        "printed_B": {
+          "cer": 0.6928524834591371,
+          "wer": 0.9933333333333333,
+          "n": 300,
+          "seen_in_training": true,
+          "cer_norm": 0.6939707389805237,
+          "wer_norm": 0.9933333333333333
+        },
+        "printed_C": {
+          "cer": 0.45874587458745875,
+          "wer": 0.985,
+          "n": 200,
+          "seen_in_training": false,
+          "cer_norm": 0.46021789369428856,
+          "wer_norm": 0.985
+        }
+      },
+      "overall": {
+        "cer": 0.5213557936531107,
+        "wer": 0.8347826086956521,
+        "cer_norm": 0.5218673362139438,
+        "wer_norm": 0.8336956521739131
+      }
+    },
+    "v8_28800": {
+      "desc": "v7 + 28.8k joint multi-corpus steps",
+      "arch": "crnn",
+      "params": 9016755,
+      "train_minutes": null,
+      "device": "mps",
+      "domains": {
+        "camera": {
+          "cer": 0.7584369449378331,
+          "wer": 0.995,
+          "n": 200,
+          "seen_in_training": false,
+          "cer_norm": 0.7608052101835405,
+          "wer_norm": 0.995
+        },
+        "handwriting": {
+          "cer": 0.8316993464052288,
+          "wer": 0.969047619047619,
+          "n": 840,
+          "seen_in_training": false,
+          "cer_norm": 0.8265460030165912,
+          "wer_norm": 0.969047619047619
+        },
+        "printed_A": {
+          "cer": 0.004913736623716969,
+          "wer": 0.11333333333333333,
+          "n": 300,
+          "seen_in_training": true,
+          "cer_norm": 0.004913736623716969,
+          "wer_norm": 0.11333333333333333
+        },
+        "printed_B": {
+          "cer": 0.6964868139036436,
+          "wer": 0.9933333333333333,
+          "n": 300,
+          "seen_in_training": true,
+          "cer_norm": 0.6977914453452614,
+          "wer_norm": 0.9933333333333333
+        },
+        "printed_C": {
+          "cer": 0.46864686468646866,
+          "wer": 0.995,
+          "n": 200,
+          "seen_in_training": false,
+          "cer_norm": 0.4641795972268075,
+          "wer_norm": 0.995
+        }
+      },
+      "overall": {
+        "cer": 0.5289463696610516,
+        "wer": 0.8391304347826087,
+        "cer_norm": 0.5279983650589747,
+        "wer_norm": 0.8391304347826087
+      }
+    }
+  }
+}
